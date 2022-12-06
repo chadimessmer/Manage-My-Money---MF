@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "name": "my-nextron-app",
+  "description": "My application description",
+  "version": "1.0.0",
+  "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
+  "main": "app/background.js",
+  "scripts": {
+    "dev": "nextron",
+    "build": "nextron build",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "@david.kucsai/react-pdf-table": "^0.4.1",
+    "@react-pdf/renderer": "^3.0.1",
+    "electron-serve": "^1.1.0",
+    "electron-store": "^8.1.0",
+    "json2csv": "^5.0.7",
+    "react-csv": "^2.2.2",
+    "react-icons": "^4.6.1",
+    "react-pdf-table": "^1.0.0-alfa.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.7",
+    "electron": "^20.1.0",
+    "electron-builder": "^23.3.3",
+    "file-loader": "^6.2.0",
+    "next": "^12.2.5",
+    "nextron": "^8.2.0",
+    "postcss": "^8.4.13",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.1.8"
+  }
+}
