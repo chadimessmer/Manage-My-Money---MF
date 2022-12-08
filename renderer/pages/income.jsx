@@ -9,9 +9,10 @@ import MyDocument from "../components/pdfTest";
 import { CSVLink } from "react-csv";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { usePDF, Document, Page } from "@react-pdf/renderer";
+import * as XLSX from "xlsx/xlsx.mjs";
 
 function Home() {
-  const { incomeCategorie, income, setIncome, totalIncome } = useStateContext();
+  const { incomeCategorie, income, setIncome, totalIncome, expense } = useStateContext();
   const [sortState, setSortState] = useState(true);
 
   const [clicked, setClicked] = useState(false);
@@ -208,15 +209,6 @@ function Home() {
               ref={pdfRef}
             />
           )}
-          <br />
-          <CSVLink
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
-            filename={"entree.csv"}
-            data={income}
-            headers={headers}
-          >
-            Download CSV
-          </CSVLink>
         </form>
       </div>
     </React.Fragment>

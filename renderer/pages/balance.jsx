@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useStateContext } from "../lib/context";
 import { v4 as uuidv4 } from "uuid";
 import Nav from "../components/nav";
+import * as XLSX from "xlsx/xlsx.mjs";
 
 function Home() {
   const [incomePerCategorie, setIncomePerCategorie] = useState([]);
@@ -58,6 +59,115 @@ function Home() {
     setExpensePerCategorie([...arrayExpSec]);
   }, []);
 
+  const handleExportXlsx = () => {
+    let wb = XLSX.utils.book_new();
+
+    //Feuille bilan
+    let tab = [
+      {
+        val1: "Entrées",
+        val2: "",
+      },
+    ];
+
+    let blank = {
+      val1: "",
+      val2: "",
+    };
+    tab.push(blank);
+    for (const item of incomePerCategorie) {
+      if (item.total != 0) {
+        let newVal = {
+          val1: item.categorie,
+          val2: item.total,
+        };
+        tab.push(newVal);
+      }
+    }
+    let totalIncWs = {
+      val1: "Total entrées",
+      val2: totalIncome,
+    };
+    tab.push(totalIncWs);
+
+    tab.push(blank);
+
+    let headExp = {
+      val1: "Sorties",
+      val2: "",
+    };
+    tab.push(headExp);
+
+    for (const item of expensePerCategorie) {
+      if (item.total != 0) {
+        let newVal = {
+          val1: item.categorie,
+          val2: item.total,
+        };
+        tab.push(newVal);
+      }
+    }
+    let totalExpWs = {
+      val1: "Total entrées",
+      val2: totalExpense,
+    };
+    tab.push(totalExpWs);
+    tab.push(blank);
+
+    let benefice = {
+      val1: "Bénéfice",
+      val2: totalIncome - totalExpense,
+    };
+
+    tab.push(benefice);
+
+    let wsBalance = XLSX.utils.json_to_sheet(tab, { skipHeader: true });
+    XLSX.utils.book_append_sheet(wb, wsBalance, "Résumé");
+
+    // heading entrées/sorties
+
+    let heading = [["Date", "Catégorie", "Description", "Prix CHF"]];
+
+    // Feuille des entrées
+    let newIncome = [];
+    for (const inc of income) {
+      delete inc.id;
+      newIncome.push(inc);
+    }
+    let totalInc = {
+      date: "",
+      categorie: "",
+      desc: "Total",
+      prix: totalIncome,
+    };
+    newIncome.push(totalInc);
+    let wsIncome = XLSX.utils.json_to_sheet(newIncome, { origin: "A2", skipHeader: true });
+    XLSX.utils.sheet_add_aoa(wsIncome, heading); //heading: array of arrays
+    XLSX.utils.book_append_sheet(wb, wsIncome, "Entrées");
+
+    //feuille des sorties
+
+    let newExpense = [];
+    for (const exp of expense) {
+      delete exp.id;
+      newExpense.push(exp);
+    }
+
+    let totalExp = {
+      date: "",
+      categorie: "",
+      desc: "Total",
+      prix: totalExpense,
+    };
+    newExpense.push(totalExp);
+    let wsExpense = XLSX.utils.json_to_sheet(newExpense, { origin: "A2", skipHeader: true });
+    XLSX.utils.sheet_add_aoa(wsExpense, heading); //heading: array of arrays
+
+    XLSX.utils.book_append_sheet(wb, wsExpense, "Sorties");
+
+    XLSX.writeFile(wb, "comptabilitee.xlsx");
+  };
+
   return (
     <React.Fragment>
       <Head>
@@ -98,6 +208,15 @@ function Home() {
           <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
 
           <div style={{ fontWeight: "bold" }}>Bénéfice : {(totalIncome - totalExpense).toFixed(2)}</div>
+          <br />
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleExportXlsx();
+            }}
+          >
+            Exporter pour excel
+          </button>
         </div>
       </div>
     </React.Fragment>
