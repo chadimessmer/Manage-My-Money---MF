@@ -10,7 +10,7 @@ function Home() {
   const incCatRef = useRef();
   const expCatRef = useRef();
 
-  const { setIncomeCategorie, incomeCategorie, expenseCategorie, setExpenseCategorie } = useStateContext();
+  const { setIncomeCategorie, incomeCategorie, expenseCategorie, setExpenseCategorie, infos, setInfos } = useStateContext();
 
   const deleteIncCat = (index) => {
     let allIncCat = [...incomeCategorie];
@@ -20,7 +20,6 @@ function Home() {
   };
   const addIncCat = (event) => {
     if (event.key === "Enter") {
-      console.log("do validate");
       let data = [...incomeCategorie];
       let thisValue = event.target.value;
       data.push(thisValue);
@@ -37,13 +36,19 @@ function Home() {
   };
   const addExpCat = (event) => {
     if (event.key === "Enter") {
-      console.log("do validate");
       let data = [...expenseCategorie];
       let thisValue = event.target.value;
       data.push(thisValue);
       setExpenseCategorie(data);
       expCatRef.current.value = "";
     }
+  };
+
+  const changeInfo = (index, value) => {
+    let newInfo = { ...infos };
+    console.log(newInfo);
+    newInfo[index] = value;
+    setInfos(newInfo);
   };
 
   return (
@@ -54,6 +59,41 @@ function Home() {
       <div className="grid grid-col-1 text-2xl w-full ">
         <Nav />
         <form onSubmit={(e) => e.preventDefault()} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-20">
+          <label className="block text-gray-700 text-ssm font-bold mb-2" htmlFor="cat-entree">
+            Nom
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
+            type="text"
+            name="cat-entree"
+            maxLength="70"
+            value={infos.name}
+            onChange={(event) => changeInfo("name", event.target.value)}
+          />
+          <label className="block text-gray-700 text-ssm font-bold mb-2" htmlFor="cat-entree">
+            Année fiscale
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
+            type="text"
+            name="cat-entree"
+            maxLength="70"
+            value={infos.year}
+            onChange={(event) => changeInfo("year", event.target.value)}
+          />
+          <label className="block text-gray-700 text-ssm font-bold mb-2" htmlFor="cat-entree">
+            Numéro de référence fiscale
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
+            type="text"
+            name="cat-entree"
+            maxLength="70"
+            value={infos.ref}
+            onChange={(event) => changeInfo("ref", event.target.value)}
+          />
+          <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
+
           <label className="block text-gray-700 text-ssm font-bold mb-2" htmlFor="cat-entree">
             Catégories d'entrées
           </label>

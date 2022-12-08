@@ -114,7 +114,7 @@ function MyDocument({ income, totalIncome }) {
               <Text style={tableCellHeaderStyle}>Nom</Text>
             </View>
             <View style={tableColHeaderStyle}>
-              <Text style={tableCellHeaderStyle}>Prix</Text>
+              <Text style={tableCellHeaderStyle}>Montant</Text>
             </View>
           </View>
           {income.map((input, index) => {

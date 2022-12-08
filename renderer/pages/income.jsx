@@ -67,13 +67,8 @@ function Home() {
       setSortState(true);
     }
   };
-  let incomeRef = useRef();
-
-  incomeRef.current = income;
 
   const GeneratePDF = () => {
-    // pdfRef.current.click();
-    console.log(incomeCategorie);
     return (
       <>
         <PDFDownloadLink
@@ -111,7 +106,7 @@ function Home() {
               Description <TbArrowsSort onClick={() => sortBy("desc")} />
             </div>
             <div className="prix">
-              Prix
+              Montant
               <TbArrowsSort onClick={() => sortBy("prix")} />
             </div>
           </div>
@@ -204,10 +199,7 @@ function Home() {
           )}
           <br />
           {clicked && (
-            <GeneratePDF
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
-              ref={pdfRef}
-            />
+            <GeneratePDF className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500" />
           )}
         </form>
       </div>

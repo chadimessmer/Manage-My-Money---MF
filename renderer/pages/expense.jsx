@@ -71,7 +71,7 @@ function Home() {
               Description <TbArrowsSort onClick={() => sortBy("desc")} />
             </div>
             <div className="prix">
-              Prix <TbArrowsSort onClick={() => sortBy("prix")} />
+              Montant <TbArrowsSort onClick={() => sortBy("prix")} />
             </div>
           </div>
           <div>

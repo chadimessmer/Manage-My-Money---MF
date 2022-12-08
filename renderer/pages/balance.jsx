@@ -66,7 +66,7 @@ function Home() {
     let tab = [
       {
         val1: "Entrées",
-        val2: "",
+        val2: "CHF",
       },
     ];
 
@@ -108,7 +108,7 @@ function Home() {
       }
     }
     let totalExpWs = {
-      val1: "Total entrées",
+      val1: "Total sorties",
       val2: totalExpense,
     };
     tab.push(totalExpWs);
@@ -126,7 +126,7 @@ function Home() {
 
     // heading entrées/sorties
 
-    let heading = [["Date", "Catégorie", "Description", "Prix CHF"]];
+    let heading = [["Date", "Catégorie", "Description", "Montant CHF"]];
 
     // Feuille des entrées
     let newIncome = [];
@@ -179,35 +179,35 @@ function Home() {
           <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-gray-800">Résumé</h1>
         </div>
         <div className="flex-wrap flex flex-col justify-center bg-white shadow-md rounded px-8 pt-6 pb-8">
-          <h2 style={{ fontWeight: "bold", marginBottom: "20px" }}>Entrées</h2>
+          <h2 style={{ fontWeight: "bold", marginBottom: "20px" }}>Chiffre d'affaire</h2>
           {incomePerCategorie.map((item, index) => {
             if (item.total != 0) {
               return (
                 <p>
-                  {item.categorie} : {item.total}
+                  {item.categorie} : {item.total} CHF
                 </p>
               );
             }
             return;
           })}
-          <div style={{ fontWeight: "bold" }}>total entrées : {totalIncome}</div>
+          <div style={{ fontWeight: "bold" }}>total entrées : {totalIncome} CHF</div>
           <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
 
-          <h2 style={{ fontWeight: "bold", marginBottom: "20px" }}>Sorties</h2>
+          <h2 style={{ fontWeight: "bold", marginBottom: "20px" }}>Frais</h2>
           {expensePerCategorie.map((item, index) => {
             if (item.total != 0) {
               return (
                 <p>
-                  {item.categorie} : {item.total}
+                  {item.categorie} : {item.total} CHF
                 </p>
               );
             }
             return;
           })}
-          <div style={{ fontWeight: "bold" }}>total sorties : {totalExpense}</div>
+          <div style={{ fontWeight: "bold" }}>total sorties : {totalExpense} CHF</div>
           <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
 
-          <div style={{ fontWeight: "bold" }}>Bénéfice : {(totalIncome - totalExpense).toFixed(2)}</div>
+          <div style={{ fontWeight: "bold" }}>Résultat : {(totalIncome - totalExpense).toFixed(2)} CHF</div>
           <br />
           <button
             onClick={(e) => {

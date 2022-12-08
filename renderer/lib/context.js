@@ -12,6 +12,7 @@ export const StateContext = ({ children }) => {
   const [expenseCategorie, setExpenseCategorie] = useState(["Communications", "Achat matériel", "Loyer", "Frais de transports", "Assurances"]);
   const [name, setName] = useState("");
   const [year, setYear] = useState(new Date().getFullYear());
+  const [infos, setInfos] = useState({});
 
   useEffect(() => {
     if (income.length > 0) {
@@ -47,6 +48,8 @@ export const StateContext = ({ children }) => {
   return (
     <ComptaContext.Provider
       value={{
+        infos,
+        setInfos,
         expenseCategorie,
         setExpenseCategorie,
         incomeCategorie,
