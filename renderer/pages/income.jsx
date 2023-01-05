@@ -12,8 +12,11 @@ import { usePDF, Document, Page } from "@react-pdf/renderer";
 import * as XLSX from "xlsx/xlsx.mjs";
 
 function Home() {
-  const { incomeCategorie, income, setIncome, totalIncome, expense } = useStateContext();
+  const { incomeCategorie, income, setIncome, totalIncome } = useStateContext();
   const [sortState, setSortState] = useState(true);
+  const [incomeDisplay, setIncomeDisplay] = useState(income);
+  // const [filterBy, setFilterBy] = useState("desc");
+  const [totalIncomeDisplay, setTotalIncomeDisplay] = useState(0);
 
   const [clicked, setClicked] = useState(false);
 
@@ -29,11 +32,31 @@ function Home() {
     console.log("fe");
   }, [income]);
 
+  useEffect(() => {
+    setIncomeDisplay([...income]);
+    console.log(incomeDisplay);
+  }, [income]);
+
+  useEffect(() => {
+    if (incomeDisplay.length > 0) {
+      let total = 0;
+      for (const facture of incomeDisplay) {
+        if (facture.prix != "" || facture.prix == isNaN) {
+          let thisFacture = parseFloat(facture.prix);
+          total += thisFacture;
+        }
+      }
+      setTotalIncomeDisplay(total.toFixed(2));
+    } else {
+      setTotalIncomeDisplay(0);
+    }
+  }, [incomeDisplay]);
+
   const pdfRef = useRef();
 
   const addMore = (e) => {
     e.preventDefault();
-    let newField = { date: "", categorie: incomeCategorie[0], desc: "", prix: "", id: uuidv4() };
+    let newField = { date: "", categorie: "", desc: "", prix: "", id: uuidv4() };
     setIncome([...income, newField]);
     setClicked(false);
   };
@@ -50,7 +73,12 @@ function Home() {
     let data = [...income];
     let thisValue = event.target.value;
     if (event.target.name === "prix") {
-      let number = parseFloat(thisValue);
+      let number;
+      if (thisValue != "") {
+        number = parseFloat(thisValue);
+      } else {
+        number = thisValue;
+      }
       data[index][event.target.name] = number;
     } else {
       data[index][event.target.name] = thisValue;
@@ -74,7 +102,7 @@ function Home() {
         <PDFDownloadLink
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
           id="pdf"
-          document={<MyDocument totalIncome={totalIncome} income={income} />}
+          document={<MyDocument totalIncome={totalIncomeDisplay} income={incomeDisplay} />}
           fileName="entree.pdf"
         >
           {({ blob, url, loading, error }) => (loading ? "Loading document..." : "Download PDF!")}
@@ -82,6 +110,15 @@ function Home() {
         <br />
       </>
     );
+  };
+
+  const handleSearch = (event) => {
+    let value = event.target.value;
+    const filter = income.filter((item) => {
+      return item.desc.toLowerCase().includes(value.toLowerCase()) || item.categorie.toLowerCase().includes(value.toLowerCase());
+    });
+    setIncomeDisplay(filter);
+    console.log(filter);
   };
 
   return (
@@ -95,15 +132,21 @@ function Home() {
           <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-gray-800">Entrées</h1>
         </div>
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8">
+          Recherche :
+          <input
+            className="shadow ml-5 appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
+            type="text"
+            onChange={(event) => handleSearch(event)}
+          />
           <div className="entree title bg-white  rounded ">
             <div className="date">
               Date <TbArrowsSort onClick={() => sortBy("date")} />
             </div>
             <div className="categorie">
-              Catégorie <TbArrowsSort onClick={() => sortBy("categorie")} />
+              Compte <TbArrowsSort onClick={() => sortBy("categorie")} />
             </div>
             <div className="description">
-              Description <TbArrowsSort onClick={() => sortBy("desc")} />
+              Libellé <TbArrowsSort onClick={() => sortBy("desc")} />
             </div>
             <div className="prix">
               Montant
@@ -111,7 +154,7 @@ function Home() {
             </div>
           </div>
           <div>
-            {income.map((input, index) => {
+            {incomeDisplay.map((input, index) => {
               return (
                 <div className="entree" key={input.id}>
                   <input
@@ -130,6 +173,7 @@ function Home() {
                       value={input.categorie}
                       onChange={(event) => handleFormChange(index, event)}
                     >
+                      <option value=""></option>
                       {incomeCategorie.map((input, index) => {
                         return (
                           <option value={input} key={index}>
@@ -174,7 +218,7 @@ function Home() {
               );
             })}
           </div>
-          <div style={{ textAlign: "right" }}>total : {totalIncome} CHF</div>
+          <div style={{ textAlign: "right" }}>total : {totalIncomeDisplay} CHF</div>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
             onClick={addMore}

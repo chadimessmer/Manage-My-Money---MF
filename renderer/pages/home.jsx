@@ -95,7 +95,7 @@ function Home() {
           <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
 
           <label className="block text-gray-700 text-ssm font-bold mb-2" htmlFor="cat-entree">
-            Catégories d'entrées
+            Comptes d'entrées
           </label>
           <input
             ref={incCatRef}
@@ -125,7 +125,7 @@ function Home() {
           })}
 
           <label className="block text-gray-700 text-ssm font-bold mb-2" htmlFor="cat-entree">
-            Catégories de sorties
+            Comptes de sorties
           </label>
           <input
             ref={expCatRef}

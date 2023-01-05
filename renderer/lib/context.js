@@ -8,8 +8,15 @@ export const StateContext = ({ children }) => {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
   const [balance, setBalance] = useState(0);
-  const [incomeCategorie, setIncomeCategorie] = useState(["Vente", "Représentation", "Autre", "Concert", "Enseignement"]);
-  const [expenseCategorie, setExpenseCategorie] = useState(["Communications", "Achat matériel", "Loyer", "Frais de transports", "Assurances"]);
+  const [incomeCategorie, setIncomeCategorie] = useState(["Vente", "Autre", "Concert", "Enseignement"]);
+  const [expenseCategorie, setExpenseCategorie] = useState([
+    "Communications",
+    "Représentation",
+    "Achat matériel",
+    "Loyer",
+    "Frais de transports",
+    "Assurances",
+  ]);
   const [name, setName] = useState("");
   const [year, setYear] = useState(new Date().getFullYear());
   const [infos, setInfos] = useState({});

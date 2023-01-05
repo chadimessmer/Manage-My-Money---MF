@@ -28,7 +28,12 @@ function Home() {
     let data = [...expense];
     let thisValue = event.target.value;
     if (event.target.name === "prix") {
-      let number = parseFloat(thisValue);
+      let number;
+      if (thisValue != "") {
+        number = parseFloat(thisValue);
+      } else {
+        number = thisValue;
+      }
       data[index][event.target.name] = number;
     } else {
       data[index][event.target.name] = thisValue;
@@ -65,10 +70,10 @@ function Home() {
             </div>
 
             <div className="categorie">
-              Catégorie <TbArrowsSort onClick={() => sortBy("categorie")} />
+              Compte <TbArrowsSort onClick={() => sortBy("categorie")} />
             </div>
             <div className="description">
-              Description <TbArrowsSort onClick={() => sortBy("desc")} />
+              Libellé <TbArrowsSort onClick={() => sortBy("desc")} />
             </div>
             <div className="prix">
               Montant <TbArrowsSort onClick={() => sortBy("prix")} />
