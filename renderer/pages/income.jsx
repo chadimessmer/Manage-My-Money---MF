@@ -15,7 +15,7 @@ function Home() {
   const { incomeCategorie, income, setIncome, totalIncome } = useStateContext();
   const [sortState, setSortState] = useState(true);
   const [incomeDisplay, setIncomeDisplay] = useState(income);
-  // const [filterBy, setFilterBy] = useState("desc");
+  const [filterBy, setFilterBy] = useState("");
   const [totalIncomeDisplay, setTotalIncomeDisplay] = useState(0);
 
   const [clicked, setClicked] = useState(false);
@@ -38,19 +38,21 @@ function Home() {
   }, [income]);
 
   useEffect(() => {
-    if (incomeDisplay.length > 0) {
+    if (income.length > 0) {
       let total = 0;
-      for (const facture of incomeDisplay) {
-        if (facture.prix != "" || facture.prix == isNaN) {
-          let thisFacture = parseFloat(facture.prix);
-          total += thisFacture;
+      for (const facture of income) {
+        if (facture.desc.toLowerCase().includes(filterBy.toLowerCase())) {
+          if (facture.prix != "" || facture.prix == isNaN) {
+            let thisFacture = parseFloat(facture.prix);
+            total += thisFacture;
+          }
         }
       }
       setTotalIncomeDisplay(total.toFixed(2));
     } else {
       setTotalIncomeDisplay(0);
     }
-  }, [incomeDisplay]);
+  }, [filterBy, income]);
 
   const pdfRef = useRef();
 
@@ -115,10 +117,12 @@ function Home() {
   const handleSearch = (event) => {
     let value = event.target.value;
     const filter = income.filter((item) => {
-      return item.desc.toLowerCase().includes(value.toLowerCase()) || item.categorie.toLowerCase().includes(value.toLowerCase());
+      return item.desc.toLowerCase().includes(value.toLowerCase());
     });
     setIncomeDisplay(filter);
     console.log(filter);
+    setFilterBy(value);
+    setClicked(false);
   };
 
   return (
@@ -154,68 +158,71 @@ function Home() {
             </div>
           </div>
           <div>
-            {incomeDisplay.map((input, index) => {
-              return (
-                <div className="entree" key={input.id}>
-                  <input
-                    className="date shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
-                    type="date"
-                    name="date"
-                    value={input.date}
-                    onChange={(event) => handleFormChange(index, event)}
-                  />
-
-                  <div className="inline-block relative w-64">
-                    <select
-                      className="block appearance-none w-full bg-white border   px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:border-gray-500"
-                      name="categorie"
-                      id="currency"
-                      value={input.categorie}
+            {income.map((input, index) => {
+              console.log(input);
+              if (input.desc.toLowerCase().includes(filterBy.toLowerCase())) {
+                return (
+                  <div className="entree" key={input.id}>
+                    <input
+                      className="date shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
+                      type="date"
+                      name="date"
+                      value={input.date}
                       onChange={(event) => handleFormChange(index, event)}
-                    >
-                      <option value=""></option>
-                      {incomeCategorie.map((input, index) => {
-                        return (
-                          <option value={input} key={index}>
-                            {input}
-                          </option>
-                        );
-                      })}
-                      {/* <option value="CHF">CHF</option>
-                      <option value="EUR">EUR</option> */}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                      <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
-                    </div>
-                  </div>
+                    />
 
-                  <input
-                    className="description shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
-                    type="text"
-                    name="desc"
-                    value={input.desc}
-                    onChange={(event) => handleFormChange(index, event)}
-                  />
-                  <input
-                    className="prix shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
-                    type="number"
-                    value={input.prix}
-                    name="prix"
-                    onChange={(event) => handleFormChange(index, event)}
-                  />
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      removeIncome(index);
-                    }}
-                    className="delete text-white font-bold py-2 px-4 w-11 rounded focus:outline-none focus:border-gray-500"
-                  >
-                    -
-                  </button>
-                </div>
-              );
+                    <div className="inline-block relative w-64">
+                      <select
+                        className="block appearance-none w-full bg-white border   px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:border-gray-500"
+                        name="categorie"
+                        id="currency"
+                        value={input.categorie}
+                        onChange={(event) => handleFormChange(index, event)}
+                      >
+                        <option value=""></option>
+                        {incomeCategorie.map((input, index) => {
+                          return (
+                            <option value={input} key={index}>
+                              {input}
+                            </option>
+                          );
+                        })}
+                        {/* <option value="CHF">CHF</option>
+                      <option value="EUR">EUR</option> */}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    <input
+                      className="description shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
+                      type="text"
+                      name="desc"
+                      value={input.desc}
+                      onChange={(event) => handleFormChange(index, event)}
+                    />
+                    <input
+                      className="prix shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
+                      type="number"
+                      value={input.prix}
+                      name="prix"
+                      onChange={(event) => handleFormChange(index, event)}
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        removeIncome(index);
+                      }}
+                      className="delete text-white font-bold py-2 px-4 w-11 rounded focus:outline-none focus:border-gray-500"
+                    >
+                      -
+                    </button>
+                  </div>
+                );
+              }
             })}
           </div>
           <div style={{ textAlign: "right" }}>total : {totalIncomeDisplay} CHF</div>
