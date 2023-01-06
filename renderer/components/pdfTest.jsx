@@ -108,10 +108,10 @@ function MyDocument({ income, totalIncome }) {
               <Text style={tableCellHeaderStyle}>Date</Text>
             </View>
             <View style={tableColHeaderStyle}>
-              <Text style={tableCellHeaderStyle}>Catégorie</Text>
+              <Text style={tableCellHeaderStyle}>Compte</Text>
             </View>
             <View style={tableColHeaderStyle}>
-              <Text style={tableCellHeaderStyle}>Nom</Text>
+              <Text style={tableCellHeaderStyle}>Libellé</Text>
             </View>
             <View style={tableColHeaderStyle}>
               <Text style={tableCellHeaderStyle}>Montant</Text>

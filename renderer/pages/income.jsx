@@ -15,8 +15,9 @@ function Home() {
   const { incomeCategorie, income, setIncome, totalIncome } = useStateContext();
   const [sortState, setSortState] = useState(true);
   const [incomeDisplay, setIncomeDisplay] = useState(income);
-  const [filterBy, setFilterBy] = useState("");
+  const [filterBy, setFilterBy] = useState("desc");
   const [totalIncomeDisplay, setTotalIncomeDisplay] = useState(0);
+  const [filterValue, setFilterValue] = useState("");
 
   const [clicked, setClicked] = useState(false);
 
@@ -41,7 +42,7 @@ function Home() {
     if (income.length > 0) {
       let total = 0;
       for (const facture of income) {
-        if (facture.desc.toLowerCase().includes(filterBy.toLowerCase())) {
+        if (facture[filterBy].toLowerCase().includes(filterValue.toLowerCase())) {
           if (facture.prix != "" || facture.prix == isNaN) {
             let thisFacture = parseFloat(facture.prix);
             total += thisFacture;
@@ -52,7 +53,7 @@ function Home() {
     } else {
       setTotalIncomeDisplay(0);
     }
-  }, [filterBy, income]);
+  }, [filterValue, income]);
 
   const pdfRef = useRef();
 
@@ -117,11 +118,10 @@ function Home() {
   const handleSearch = (event) => {
     let value = event.target.value;
     const filter = income.filter((item) => {
-      return item.desc.toLowerCase().includes(value.toLowerCase());
+      return item[filterBy].toLowerCase().includes(value.toLowerCase());
     });
     setIncomeDisplay(filter);
-    console.log(filter);
-    setFilterBy(value);
+    setFilterValue(value);
     setClicked(false);
   };
 
@@ -137,8 +137,28 @@ function Home() {
         </div>
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8">
           Recherche :
+          <div className="ml-5  inline-block relative w-64">
+            <select
+              className="block appearance-none w-full bg-white border   px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:border-gray-500"
+              name="categorie"
+              id="currency"
+              value={filterBy}
+              onChange={(event) => setFilterBy(event.target.value)}
+            >
+              <option value="categorie">Compte</option>
+              <option value="desc">Libellé</option>
+
+              {/* <option value="CHF">CHF</option>
+                      <option value="EUR">EUR</option> */}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+              </svg>
+            </div>
+          </div>{" "}
           <input
-            className="shadow ml-5 appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
+            className="shadow  appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
             type="text"
             onChange={(event) => handleSearch(event)}
           />
@@ -159,8 +179,7 @@ function Home() {
           </div>
           <div>
             {income.map((input, index) => {
-              console.log(input);
-              if (input.desc.toLowerCase().includes(filterBy.toLowerCase())) {
+              if (input[filterBy].toLowerCase().includes(filterValue.toLowerCase())) {
                 return (
                   <div className="entree" key={input.id}>
                     <input

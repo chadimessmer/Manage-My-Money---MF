@@ -126,7 +126,7 @@ function Home() {
 
     // heading entrées/sorties
 
-    let heading = [["Date", "Catégorie", "Description", "Montant CHF"]];
+    let heading = [["Date", "Compte", "Libellé", "Montant CHF"]];
 
     // Feuille des entrées
     let newIncome = [];
