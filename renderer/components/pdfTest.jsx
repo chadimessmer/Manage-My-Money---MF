@@ -118,10 +118,15 @@ function MyDocument({ income, totalIncome }) {
             </View>
           </View>
           {income.map((input, index) => {
+            const date = input.date;
+
+            const [year, month, day] = date.split("-");
+
+            const result = [day, month, year].join("/");
             return (
               <View key={index} style={tableRowStyle}>
                 <View style={firstTableColStyle}>
-                  <Text style={tableCellStyle}>{input.date}</Text>
+                  <Text style={tableCellStyle}>{result}</Text>
                 </View>
                 <View style={tableColStyle}>
                   <Text style={tableCellStyle}>{input.categorie}</Text>

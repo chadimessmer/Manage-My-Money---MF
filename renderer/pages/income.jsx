@@ -60,7 +60,7 @@ function Home() {
   const addMore = (e) => {
     e.preventDefault();
     let newField = { date: "", categorie: "", desc: "", prix: "", id: uuidv4() };
-    setIncome([...income, newField]);
+    setIncome([newField, ...income]);
     setClicked(false);
   };
 
@@ -156,12 +156,19 @@ function Home() {
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
               </svg>
             </div>
-          </div>{" "}
+          </div>
           <input
             className="shadow  appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
             type="text"
             onChange={(event) => handleSearch(event)}
           />
+          <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
+          <div
+            className="cursor-pointer bg-blue-500 max-w-xs hover:bg-blue-700 text-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
+            onClick={addMore}
+          >
+            ajouter entrée
+          </div>
           <div className="entree title bg-white  rounded ">
             <div className="date">
               Date <TbArrowsSort onClick={() => sortBy("date")} />
@@ -183,16 +190,16 @@ function Home() {
                 return (
                   <div className="entree" key={input.id}>
                     <input
-                      className="date shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
+                      className="date mt-1 mb-1 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"
                       type="date"
                       name="date"
                       value={input.date}
                       onChange={(event) => handleFormChange(index, event)}
                     />
 
-                    <div className="inline-block relative w-64">
+                    <div className="inline-block  relative w-64">
                       <select
-                        className="block appearance-none w-full bg-white border   px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:border-gray-500"
+                        className="block  appearance-none w-full bg-white border   px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:border-gray-500"
                         name="categorie"
                         id="currency"
                         value={input.categorie}
@@ -230,33 +237,27 @@ function Home() {
                       name="prix"
                       onChange={(event) => handleFormChange(index, event)}
                     />
-                    <button
+                    <div
                       onClick={(e) => {
                         e.preventDefault();
                         removeIncome(index);
                       }}
-                      className="delete text-white font-bold py-2 px-4 w-11 rounded focus:outline-none focus:border-gray-500"
+                      className="cursor-pointer delete text-white font-bold py-2 px-4 w-11 rounded focus:outline-none focus:border-gray-500"
                     >
                       -
-                    </button>
+                    </div>
                   </div>
                 );
               }
             })}
           </div>
           <div style={{ textAlign: "right" }}>total : {totalIncomeDisplay} CHF</div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
-            onClick={addMore}
-          >
-            ajouter facture
-          </button>
           <br />
           {!clicked && (
             <>
               <br />
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
+              <div
+                className="cursor-pointer bg-blue-500 max-w-xs text-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
                 onClick={(e) => {
                   e.preventDefault();
                   setClicked(true);
@@ -264,7 +265,7 @@ function Home() {
                 }}
               >
                 Générer PDF
-              </button>
+              </div>
             </>
           )}
           <br />

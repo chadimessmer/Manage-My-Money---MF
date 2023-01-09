@@ -17,6 +17,7 @@
     "electron-store": "^8.1.0",
     "json2csv": "^5.0.7",
     "react-csv": "^2.2.2",
+    "react-date-picker": "^9.1.0",
     "react-icons": "^4.6.1",
     "react-pdf-table": "^1.0.0-alfa.3",
     "xlsx": "^0.18.5"
