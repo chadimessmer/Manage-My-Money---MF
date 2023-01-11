@@ -71,7 +71,7 @@ function Home() {
             onChange={(event) => changeInfo("name", event.target.value)}
           />
           <label className="block text-gray-700 text-ssm font-bold mb-2" htmlFor="cat-entree">
-            Année fiscale
+            Période fiscale
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-gray-500"

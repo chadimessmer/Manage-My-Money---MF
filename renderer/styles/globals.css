@@ -17,6 +17,11 @@
   width: 10%;
   display: flex;
 }
+
+.piece {
+  width: 8%;
+  display: flex;
+}
 .entree {
   display: flex;
   align-items: center;
@@ -35,13 +40,19 @@ a {
 }
 
 .date {
-  width: 18%;
+  width: 15%;
   display: flex;
 }
 
 svg {
   font-size: 60px;
   color: rgb(59 130 246);
+}
+.icon path {
+  stroke: rgb(59 130 246);
+}
+.icon path:hover {
+  stroke: rgb(29 78 216);
 }
 
 svg:hover {
@@ -62,7 +73,7 @@ svg:hover {
 }
 
 .categorie {
-  width: 22%;
+  width: 17%;
   display: flex;
 }
 

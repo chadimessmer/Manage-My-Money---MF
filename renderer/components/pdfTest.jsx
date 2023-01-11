@@ -40,7 +40,7 @@ const tableRowStyle = {
 };
 
 const firstTableColHeaderStyle = {
-  width: "20%",
+  width: "15%",
   borderStyle: "solid",
   borderColor: "#000",
   borderBottomColor: "#000",
@@ -50,7 +50,28 @@ const firstTableColHeaderStyle = {
 };
 
 const tableColHeaderStyle = {
-  width: "20%",
+  width: "30%",
+  borderStyle: "solid",
+  borderColor: "#000",
+  borderBottomColor: "#000",
+  borderWidth: 1,
+  borderLeftWidth: 0,
+  backgroundColor: "#bdbdbd",
+  fontFamily: "Helvetica-Bold",
+};
+
+const tableColHeaderStyleSmall = {
+  width: "8%",
+  borderStyle: "solid",
+  borderColor: "#000",
+  borderBottomColor: "#000",
+  borderWidth: 1,
+  borderLeftWidth: 0,
+  backgroundColor: "#bdbdbd",
+  fontFamily: "Helvetica-Bold",
+};
+const tableColHeaderStyleMedium = {
+  width: "15%",
   borderStyle: "solid",
   borderColor: "#000",
   borderBottomColor: "#000",
@@ -61,7 +82,7 @@ const tableColHeaderStyle = {
 };
 
 const firstTableColStyle = {
-  width: "20%",
+  width: "15%",
   borderStyle: "solid",
   borderColor: "#000",
   borderWidth: 1,
@@ -69,7 +90,23 @@ const firstTableColStyle = {
 };
 
 const tableColStyle = {
-  width: "20%",
+  width: "30%",
+  borderStyle: "solid",
+  borderColor: "#000",
+  borderWidth: 1,
+  borderLeftWidth: 0,
+  borderTopWidth: 0,
+};
+const tableColStyleSmall = {
+  width: "8%",
+  borderStyle: "solid",
+  borderColor: "#000",
+  borderWidth: 1,
+  borderLeftWidth: 0,
+  borderTopWidth: 0,
+};
+const tableColStyleMedium = {
+  width: "15%",
   borderStyle: "solid",
   borderColor: "#000",
   borderWidth: 1,
@@ -78,19 +115,19 @@ const tableColStyle = {
 };
 
 const tableCellHeaderStyle = {
-  textAlign: "center",
+  textAlign: "left",
   margin: 4,
   fontSize: 12,
   fontFamily: "Helvetica-Bold",
 };
 
 const tableCellStyle = {
-  textAlign: "center",
+  textAlign: "left",
   margin: 5,
   fontSize: 10,
 };
 const tableCellStyleTotal = {
-  textAlign: "center",
+  textAlign: "left",
   margin: 5,
   fontSize: 10,
   fontFamily: "Helvetica-Bold",
@@ -107,13 +144,16 @@ function MyDocument({ income, totalIncome }) {
             <View style={firstTableColHeaderStyle}>
               <Text style={tableCellHeaderStyle}>Date</Text>
             </View>
-            <View style={tableColHeaderStyle}>
+            <View style={tableColHeaderStyleMedium}>
               <Text style={tableCellHeaderStyle}>Compte</Text>
+            </View>
+            <View style={tableColHeaderStyleSmall}>
+              <Text style={tableCellHeaderStyle}>Pièce</Text>
             </View>
             <View style={tableColHeaderStyle}>
               <Text style={tableCellHeaderStyle}>Libellé</Text>
             </View>
-            <View style={tableColHeaderStyle}>
+            <View style={tableColHeaderStyleMedium}>
               <Text style={tableCellHeaderStyle}>Montant</Text>
             </View>
           </View>
@@ -128,14 +168,20 @@ function MyDocument({ income, totalIncome }) {
                 <View style={firstTableColStyle}>
                   <Text style={tableCellStyle}>{result}</Text>
                 </View>
-                <View style={tableColStyle}>
+                <View style={tableColStyleMedium}>
                   <Text style={tableCellStyle}>{input.categorie}</Text>
+                </View>
+                <View style={tableColStyleSmall}>
+                  <Text style={tableCellStyle}>{input.piece}</Text>
                 </View>
                 <View style={tableColStyle}>
                   <Text style={tableCellStyle}>{input.desc}</Text>
                 </View>
-                <View style={tableColStyle}>
-                  <Text style={tableCellStyle}>{input.prix} CHF</Text>
+                <View style={tableColStyleMedium}>
+                  <Text style={tableCellStyle}>
+                    {input.in ? "" : "-"}
+                    {input.prix} CHF
+                  </Text>
                 </View>
               </View>
             );
@@ -144,13 +190,16 @@ function MyDocument({ income, totalIncome }) {
             <View style={firstTableColStyle}>
               <Text style={tableCellStyle}> </Text>
             </View>
-            <View style={tableColStyle}>
+            <View style={tableColStyleMedium}>
+              <Text style={tableCellStyle}> </Text>
+            </View>
+            <View style={tableColStyleSmall}>
               <Text style={tableCellStyle}> </Text>
             </View>
             <View style={tableColStyle}>
               <Text style={tableCellStyle}> </Text>
             </View>
-            <View style={tableColStyle}>
+            <View style={tableColStyleMedium}>
               <Text style={tableCellStyle}> </Text>
             </View>
           </View>
@@ -158,13 +207,16 @@ function MyDocument({ income, totalIncome }) {
             <View style={firstTableColStyle}>
               <Text style={tableCellStyle}></Text>
             </View>
-            <View style={tableColStyle}>
+            <View style={tableColStyleMedium}>
+              <Text style={tableCellStyle}></Text>
+            </View>
+            <View style={tableColStyleSmall}>
               <Text style={tableCellStyle}></Text>
             </View>
             <View style={tableColStyle}>
               <Text style={tableCellStyleTotal}>Total</Text>
             </View>
-            <View style={tableColStyle}>
+            <View style={tableColStyleMedium}>
               <Text style={tableCellStyleTotal}>{totalIncome} CHF</Text>
             </View>
           </View>

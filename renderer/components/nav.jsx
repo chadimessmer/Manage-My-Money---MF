@@ -3,6 +3,7 @@ import Link from "next/link";
 import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
 import { FaBalanceScaleLeft } from "react-icons/fa";
 import { IconContext } from "react-icons/lib";
+import { GrTransaction } from "react-icons/gr";
 export default function Nav() {
   return (
     <div className="menu">
@@ -10,11 +11,11 @@ export default function Nav() {
         <AiFillHome />
       </Link>
       <Link href="/income">
-        <GiReceiveMoney />
+        <GrTransaction className="icon" />
       </Link>
-      <Link href="/expense">
+      {/* <Link href="/expense">
         <GiPayMoney />
-      </Link>
+      </Link> */}
       <Link href="/balance">
         <FaBalanceScaleLeft />
       </Link>
