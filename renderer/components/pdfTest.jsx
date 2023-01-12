@@ -22,6 +22,12 @@ const styles = StyleSheet.create({
     padding: "4px 0 4px 0",
     border: "1px solid black",
   },
+  subtitle: {
+    fontSize: "12px",
+  },
+  subwrapper: {
+    padding: "10px 0 10px 0",
+  },
 });
 
 const pageStyle = {
@@ -134,12 +140,19 @@ const tableCellStyleTotal = {
 };
 
 // Create Document Component
-function MyDocument({ income, totalIncome }) {
+function MyDocument({ income, totalIncome, infos }) {
   return (
     <Document>
       <Page size="A4" style={pageStyle} orientation="portrait">
         <View style={tableStyle}>
-          <Text style={styles.title}>Entrées</Text>
+          <Text style={styles.title}>Transactions</Text>
+          {infos && (
+            <View style={styles.subwrapper}>
+              <Text style={styles.subtitle}>{infos.name}</Text>
+              <Text style={styles.subtitle}>Période fiscale : {infos.year}</Text>
+              <Text style={styles.subtitle}>Réf : {infos.ref}</Text>
+            </View>
+          )}
           <View style={tableRowStyle} fixed>
             <View style={firstTableColHeaderStyle}>
               <Text style={tableCellHeaderStyle}>Date</Text>

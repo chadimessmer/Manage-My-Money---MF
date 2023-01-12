@@ -12,9 +12,9 @@ import { usePDF, Document, Page } from "@react-pdf/renderer";
 import * as XLSX from "xlsx/xlsx.mjs";
 
 function Home() {
-  const { incomeCategorie, income, setIncome, totalIncome, expenseCategorie } = useStateContext();
+  const { transaction, setTransaction, incomeCategorie, income, setIncome, totalIncome, expenseCategorie, infos } = useStateContext();
   const [sortState, setSortState] = useState(true);
-  const [incomeDisplay, setIncomeDisplay] = useState(income);
+  const [incomeDisplay, setIncomeDisplay] = useState(transaction);
   const [filterBy, setFilterBy] = useState("desc");
   const [totalIncomeDisplay, setTotalIncomeDisplay] = useState(0);
   const [filterValue, setFilterValue] = useState("");
@@ -28,21 +28,26 @@ function Home() {
     { label: "Description", key: "desc" },
     { label: "Prix", key: "prix" },
   ];
+  const inputRef = useRef(null);
 
   useState(() => {
     setClicked(false);
     console.log("fe");
-  }, [income]);
+  }, [transaction]);
 
   useEffect(() => {
-    setIncomeDisplay([...income]);
+    setIncomeDisplay([...transaction]);
     console.log(incomeDisplay);
-  }, [income]);
+  }, [transaction]);
 
   useEffect(() => {
-    if (income.length > 0) {
+    console.log(displayTransaction);
+  }, [displayTransaction]);
+
+  useEffect(() => {
+    if (transaction.length > 0) {
       let total = 0;
-      for (const facture of income) {
+      for (const facture of transaction) {
         if (String(facture[filterBy]).toLowerCase().includes(filterValue.toLowerCase())) {
           if (facture.prix != "" || facture.prix == isNaN) {
             let thisFacture = parseFloat(facture.prix);
@@ -58,33 +63,33 @@ function Home() {
     } else {
       setTotalIncomeDisplay(0);
     }
-  }, [filterValue, income, displayTransaction]);
+  }, [filterValue, transaction, displayTransaction]);
 
   const pdfRef = useRef();
 
   const addMore = (e) => {
     e.preventDefault();
     let newField = { date: "", categorie: "", piece: "", desc: "", prix: "", in: true, id: uuidv4() };
-    setIncome([newField, ...income]);
+    setTransaction([newField, ...transaction]);
     setClicked(false);
   };
   const addLess = (e) => {
     e.preventDefault();
     let newField = { date: "", categorie: "", piece: "", desc: "", prix: "", in: false, id: uuidv4() };
-    setIncome([newField, ...income]);
+    setTransaction([newField, ...transaction]);
     setClicked(false);
   };
 
   const removeIncome = (index) => {
-    let allIncome = [...income];
+    let allIncome = [...transaction];
     allIncome.splice(index, 1);
     setClicked(false);
 
-    setIncome(allIncome);
+    setTransaction(allIncome);
   };
 
   const handleFormChange = (index, event) => {
-    let data = [...income];
+    let data = [...transaction];
     let thisValue = event.target.value;
     if (event.target.name === "prix") {
       let number;
@@ -97,15 +102,15 @@ function Home() {
     } else {
       data[index][event.target.name] = thisValue;
     }
-    setIncome(data);
+    setTransaction(data);
     setClicked(false);
   };
   const sortBy = (cat) => {
     if (sortState) {
-      setIncome([...income].sort((a, b) => (a[cat] < b[cat] ? 1 : -1)));
+      setTransaction([...transaction].sort((a, b) => (a[cat] < b[cat] ? 1 : -1)));
       setSortState(false);
     } else {
-      setIncome([...income].sort((a, b) => (a[cat] > b[cat] ? 1 : -1)));
+      setTransaction([...transaction].sort((a, b) => (a[cat] > b[cat] ? 1 : -1)));
       setSortState(true);
     }
   };
@@ -116,7 +121,7 @@ function Home() {
         <PDFDownloadLink
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
           id="pdf"
-          document={<MyDocument totalIncome={totalIncomeDisplay} income={incomeDisplay} />}
+          document={<MyDocument totalIncome={totalIncomeDisplay} income={incomeDisplay} infos={infos} />}
           fileName="entree.pdf"
         >
           {({ blob, url, loading, error }) => (loading ? "Loading document..." : "Download PDF!")}
@@ -128,7 +133,7 @@ function Home() {
 
   const handleSearch = (event) => {
     let value = event.target.value;
-    const filter = income.filter((item) => {
+    const filter = transaction.filter((item) => {
       if ((displayTransaction == "income" && item.in) || (displayTransaction == "expense" && !item.in) || displayTransaction == "all") {
         return String(item[filterBy]).toLowerCase().includes(value.toLowerCase());
       }
@@ -139,7 +144,7 @@ function Home() {
   };
 
   useEffect(() => {
-    const filter = income.filter((item) => {
+    const filter = transaction.filter((item) => {
       if ((displayTransaction == "income" && item.in) || (displayTransaction == "expense" && !item.in) || displayTransaction == "all") {
         if (filterBy != "") {
           return String(item[filterBy]).toLowerCase().includes(filterValue.toLowerCase());
@@ -150,6 +155,36 @@ function Home() {
     setClicked(false);
   }, [displayTransaction]);
 
+  function onReaderLoad(e) {
+    if (e.target.files) {
+      let filesData = [];
+      let promises = [];
+      for (let i = 0; i < e.target.files.length; i++) {
+        var reader = new FileReader();
+        let promise = new Promise((resolve) => {
+          reader.onload = (event) => {
+            var obj = JSON.parse(event.target.result);
+            let totalPrice = 0;
+            let factures = obj.factures;
+            for (const facture of factures) {
+              totalPrice += parseFloat(facture.prix);
+            }
+            let newField = { date: obj.date, categorie: "", piece: "", desc: obj.title, prix: totalPrice, in: true, id: uuidv4() };
+            filesData.push(newField);
+            resolve();
+          };
+        });
+        promises.push(promise);
+        reader.readAsText(e.target.files[i]);
+      }
+      Promise.all(promises).then(() => {
+        setTransaction([...filesData, ...transaction]);
+        setClicked(false);
+        inputRef.current.value = "";
+      });
+    }
+  }
+
   return (
     <React.Fragment>
       <Head>
@@ -157,7 +192,7 @@ function Home() {
       </Head>
       <div className="grid grid-col-1 text-2xl w-full ">
         <Nav />
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 crediteur">
+        <div className="mt-20 bg-white shadow-md rounded px-8 pt-6 pb-8 crediteur">
           <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-gray-800">Transactions</h1>
         </div>
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8">
@@ -182,6 +217,7 @@ function Home() {
               </svg>
             </div>
           </div>
+          <br /> <br />
           Recherche :
           <div className="ml-5  inline-block relative w-64">
             <select
@@ -210,19 +246,37 @@ function Home() {
             onChange={(event) => handleSearch(event)}
           />
           <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
+          <label className="block text-gray-700 " htmlFor="import">
+            Importer facture Pay Your Bill (.json)
+          </label>
+          <input
+            ref={inputRef}
+            className="form-control block px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            onChange={(e) => {
+              onReaderLoad(e);
+            }}
+            type="file"
+            accept="application/JSON"
+            multiple
+          />
+          <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
           <div className="flex mb-5">
-            <div
-              className="cursor-pointer bg-green-500 max-w-xs hover:bg-green-700 text-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
-              onClick={addMore}
-            >
-              ajouter entrée
-            </div>
-            <div
-              className="ml-5 mr-5 cursor-pointer bg-red-500 max-w-xs hover:bg-red-700 text-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
-              onClick={addLess}
-            >
-              ajouter sortie
-            </div>
+            {(displayTransaction == "all" || displayTransaction == "income") && (
+              <div
+                className="mr-5 cursor-pointer bg-green-500 max-w-xs hover:bg-green-700 text-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
+                onClick={addMore}
+              >
+                ajouter entrée
+              </div>
+            )}
+            {(displayTransaction == "all" || displayTransaction == "expense") && (
+              <div
+                className="cursor-pointer bg-red-500 max-w-xs hover:bg-red-700 text-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
+                onClick={addLess}
+              >
+                ajouter sortie
+              </div>
+            )}
           </div>
           <div className="entree title bg-white  rounded ">
             <div className="date">
@@ -243,7 +297,7 @@ function Home() {
             </div>
           </div>
           <div>
-            {income.map((input, index) => {
+            {transaction.map((input, index) => {
               if ((displayTransaction == "income" && input.in) || (displayTransaction == "expense" && !input.in) || displayTransaction == "all")
                 if (String(input[filterBy]).toLowerCase().includes(filterValue.toLowerCase())) {
                   return (

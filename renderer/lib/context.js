@@ -4,6 +4,7 @@ const ComptaContext = createContext();
 
 export const StateContext = ({ children }) => {
   const [income, setIncome] = useState([]);
+  const [transaction, setTransaction] = useState([]);
   const [expense, setExpense] = useState([]);
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
@@ -22,35 +23,50 @@ export const StateContext = ({ children }) => {
   const [infos, setInfos] = useState({});
 
   useEffect(() => {
-    if (income.length > 0) {
-      let total = 0;
-      for (const facture of income) {
+    if (transaction.length > 0) {
+      console.log(transaction);
+      let totalIn = 0;
+      let totalOut = 0;
+      let incomeList = [];
+      let expenseList = [];
+      for (const facture of transaction) {
         if (facture.prix != "") {
           let thisFacture = parseFloat(facture.prix);
-          total += thisFacture;
+          if (facture.in) {
+            totalIn += thisFacture;
+            incomeList.push(facture);
+          } else {
+            totalOut += thisFacture;
+            expenseList.push(facture);
+          }
         }
       }
-      setTotalIncome(total.toFixed(2));
+      setIncome(incomeList);
+      setExpense(expenseList);
+      setTotalIncome(totalIn.toFixed(2));
+      setTotalExpense(totalOut.toFixed(2));
     } else {
       setTotalIncome(0);
-    }
-    setBalance(totalIncome - totalExpense);
-  }, [income]);
-  useEffect(() => {
-    if (expense.length > 0) {
-      let total = 0;
-      for (const facture of expense) {
-        if (facture.prix != "") {
-          let thisFacture = parseFloat(facture.prix);
-          total += thisFacture;
-        }
-      }
-      setTotalExpense(total.toFixed(2));
-    } else {
       setTotalExpense(0);
     }
     setBalance(totalIncome - totalExpense);
-  }, [expense]);
+  }, [transaction]);
+
+  // useEffect(() => {
+  //   if (expense.length > 0) {
+  //     let total = 0;
+  //     for (const facture of expense) {
+  //       if (facture.prix != "") {
+  //         let thisFacture = parseFloat(facture.prix);
+  //         total += thisFacture;
+  //       }
+  //     }
+  //     setTotalExpense(total.toFixed(2));
+  //   } else {
+  //     setTotalExpense(0);
+  //   }
+  //   setBalance(totalIncome - totalExpense);
+  // }, [expense]);
 
   return (
     <ComptaContext.Provider
@@ -71,6 +87,8 @@ export const StateContext = ({ children }) => {
         setExpense,
         totalIncome,
         setTotalIncome,
+        transaction,
+        setTransaction,
       }}
     >
       {children}

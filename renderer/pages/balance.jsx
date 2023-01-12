@@ -13,6 +13,7 @@ function Home() {
   const { expenseCategorie, incomeCategorie, balance, totalExpense, income, expense, totalIncome } = useStateContext();
 
   useEffect(() => {
+    console.log(income);
     // set income per categorie
     let array = [];
     for (const inc of incomeCategorie) {
@@ -175,7 +176,7 @@ function Home() {
       </Head>
       <div className="grid grid-col-1 text-2xl w-full ">
         <Nav />
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 crediteur">
+        <div className="mt-20 bg-white shadow-md rounded px-8 pt-6 pb-8 crediteur">
           <h1 className="text-6xl font-normal leading-normal mt-0 mb-2 text-gray-800">Résumé</h1>
         </div>
         <div className="flex-wrap flex flex-col justify-center bg-white shadow-md rounded px-8 pt-6 pb-8">
