@@ -131,22 +131,24 @@ function Home() {
             onKeyDown={addIncCat}
           />
           {incomeCategorie.map((input, index) => {
-            return (
-              <div className="inline-block  py-2 px-3" key={index}>
-                <div className="flex align-center justify-center bg-blue-500  text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500">
-                  <div>{input}</div>
-                  <div
-                    className="pl-3 delete-tag"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      deleteIncCat(index);
-                    }}
-                  >
-                    <TiDelete />
+            if (input != "-") {
+              return (
+                <div className="inline-block  py-2 px-3" key={index}>
+                  <div className="flex align-center justify-center bg-blue-500  text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500">
+                    <div>{input}</div>
+                    <div
+                      className="pl-3 delete-tag"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteIncCat(index);
+                      }}
+                    >
+                      <TiDelete />
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
+              );
+            }
           })}
 
           <label className="block text-gray-700 text-ssm font-bold mb-2" htmlFor="cat-entree">
@@ -161,22 +163,24 @@ function Home() {
             onKeyDown={addExpCat}
           />
           {expenseCategorie.map((input, index) => {
-            return (
-              <div className="inline-block  py-2 px-3" key={index}>
-                <div className="flex align-center justify-center bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500">
-                  <div>{input}</div>
-                  <div
-                    className="pl-3 delete-tag"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      deleteExpCat(index);
-                    }}
-                  >
-                    <TiDelete />
+            if (input != "-") {
+              return (
+                <div className="inline-block  py-2 px-3" key={index}>
+                  <div className="flex align-center justify-center bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500">
+                    <div>{input}</div>
+                    <div
+                      className="pl-3 delete-tag"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteExpCat(index);
+                      }}
+                    >
+                      <TiDelete />
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
+              );
+            }
           })}
         </form>
       </div>

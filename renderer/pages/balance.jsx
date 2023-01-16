@@ -5,12 +5,15 @@ import { useStateContext } from "../lib/context";
 import { v4 as uuidv4 } from "uuid";
 import Nav from "../components/nav";
 import * as XLSX from "xlsx/xlsx.mjs";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import MyDocument from "../components/pdfResult";
 
 function Home() {
   const [incomePerCategorie, setIncomePerCategorie] = useState([]);
   const [expensePerCategorie, setExpensePerCategorie] = useState([]);
+  const [clicked, setClicked] = useState(false);
 
-  const { expenseCategorie, incomeCategorie, balance, totalExpense, income, expense, totalIncome } = useStateContext();
+  const { expenseCategorie, incomeCategorie, balance, totalExpense, income, expense, totalIncome, infos } = useStateContext();
 
   useEffect(() => {
     console.log(income);
@@ -169,6 +172,30 @@ function Home() {
     XLSX.writeFile(wb, "comptabilitee.xlsx");
   };
 
+  const GeneratePDF = () => {
+    return (
+      <>
+        <PDFDownloadLink
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
+          id="pdf"
+          document={
+            <MyDocument
+              incomePerCategorie={incomePerCategorie}
+              expensePerCategorie={expensePerCategorie}
+              totalIncome={totalIncome}
+              totalExpense={totalExpense}
+              infos={infos}
+            />
+          }
+          fileName="entree.pdf"
+        >
+          {({ blob, url, loading, error }) => (loading ? "Loading document..." : "Download PDF!")}
+        </PDFDownloadLink>
+        <br />
+      </>
+    );
+  };
+
   return (
     <React.Fragment>
       <Head>
@@ -193,7 +220,6 @@ function Home() {
           })}
           <div style={{ fontWeight: "bold" }}>total entrées : {totalIncome} CHF</div>
           <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
-
           <h2 style={{ fontWeight: "bold", marginBottom: "20px" }}>Frais</h2>
           {expensePerCategorie.map((item, index) => {
             if (item.total != 0) {
@@ -207,7 +233,6 @@ function Home() {
           })}
           <div style={{ fontWeight: "bold" }}>total sorties : {totalExpense} CHF</div>
           <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
-
           <div style={{ fontWeight: "bold" }}>Résultat : {(totalIncome - totalExpense).toFixed(2)} CHF</div>
           <br />
           <button
@@ -218,6 +243,25 @@ function Home() {
           >
             Exporter pour excel
           </button>
+          {!clicked && (
+            <>
+              <br />
+              <div
+                className="cursor-pointer bg-blue-500 max-w-xs text-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setClicked(true);
+                  GeneratePDF();
+                }}
+              >
+                Générer PDF
+              </div>
+            </>
+          )}
+          <br />
+          {clicked && (
+            <GeneratePDF className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500" />
+          )}{" "}
         </div>
       </div>
     </React.Fragment>

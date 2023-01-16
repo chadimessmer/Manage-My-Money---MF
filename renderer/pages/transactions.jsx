@@ -69,13 +69,13 @@ function Home() {
 
   const addMore = (e) => {
     e.preventDefault();
-    let newField = { date: "", categorie: "", piece: "", desc: "", prix: "", in: true, id: uuidv4() };
+    let newField = { date: "", categorie: "-", piece: "", desc: "", prix: "", in: true, id: uuidv4() };
     setTransaction([newField, ...transaction]);
     setClicked(false);
   };
   const addLess = (e) => {
     e.preventDefault();
-    let newField = { date: "", categorie: "", piece: "", desc: "", prix: "", in: false, id: uuidv4() };
+    let newField = { date: "", categorie: "-", piece: "", desc: "", prix: "", in: false, id: uuidv4() };
     setTransaction([newField, ...transaction]);
     setClicked(false);
   };
@@ -318,8 +318,6 @@ function Home() {
                           value={input.categorie}
                           onChange={(event) => handleFormChange(index, event)}
                         >
-                          <option value=""></option>
-
                           {input.in
                             ? incomeCategorie.map((input, index) => {
                                 return (
