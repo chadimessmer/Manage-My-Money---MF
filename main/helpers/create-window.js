@@ -1,11 +1,11 @@
-import {
-  screen,
-  BrowserWindow,
-} from 'electron';
-import Store from 'electron-store';
+import { screen, BrowserWindow } from "electron";
+import Store from "electron-store";
+const { dialog } = require("electron");
+const { ipcMain } = require("electron");
+const fs = require("fs");
 
 export default function createWindow(windowName, options) {
-  const key = 'window-state';
+  const key = "window-state";
   const name = `window-state-${windowName}`;
   const store = new Store({ name });
   const defaultSize = {
@@ -41,13 +41,13 @@ export default function createWindow(windowName, options) {
     const bounds = screen.getPrimaryDisplay().bounds;
     return Object.assign({}, defaultSize, {
       x: (bounds.width - defaultSize.width) / 2,
-      y: (bounds.height - defaultSize.height) / 2
+      y: (bounds.height - defaultSize.height) / 2,
     });
   };
 
   const ensureVisibleOnSomeDisplay = (windowState) => {
-    const visible = screen.getAllDisplays().some(display => {
-      return windowWithinBounds(windowState, display.bounds)
+    const visible = screen.getAllDisplays().some((display) => {
+      return windowWithinBounds(windowState, display.bounds);
     });
     if (!visible) {
       // Window is partially or fully not visible now.
@@ -76,7 +76,26 @@ export default function createWindow(windowName, options) {
     },
   });
 
-  win.on('close', saveState);
+  let saved = true;
+
+  ipcMain.on("save", (event, data) => {
+    saved = data; // show the request data
+  });
+
+  win.on("close", function (e) {
+    saveState;
+    if (!saved) {
+      console.log("coucou");
+      let response = dialog.showMessageBoxSync(this, {
+        type: "question",
+        buttons: ["Fermer", "Annuler"],
+        title: "Confirm",
+        message: "Des données n'ont pas été sauvegardées, voulez-vous vraiment fermer ?",
+      });
+
+      if (response == 1) e.preventDefault();
+    }
+  });
 
   return win;
-};
+}

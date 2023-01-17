@@ -176,7 +176,7 @@ function Home() {
     return (
       <>
         <PDFDownloadLink
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
+          className="cursor-pointer bg-blue-500 max-w-xs text-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
           id="pdf"
           document={
             <MyDocument
@@ -211,38 +211,39 @@ function Home() {
           {incomePerCategorie.map((item, index) => {
             if (item.total != 0) {
               return (
-                <p>
-                  {item.categorie} : {item.total} CHF
-                </p>
+                <div className="flex ">
+                  <p className="w-96">{item.categorie} : </p>
+                  <p> {item.total} CHF</p>
+                </div>
               );
             }
             return;
           })}
-          <div style={{ fontWeight: "bold" }}>total entrées : {totalIncome} CHF</div>
+          <div className="flex " style={{ fontWeight: "bold" }}>
+            <p className="w-96">total entrées :</p> <p>{totalIncome} CHF</p>
+          </div>
           <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
           <h2 style={{ fontWeight: "bold", marginBottom: "20px" }}>Frais</h2>
           {expensePerCategorie.map((item, index) => {
             if (item.total != 0) {
               return (
-                <p>
-                  {item.categorie} : {item.total} CHF
-                </p>
+                <div className="flex ">
+                  <p className="w-96">{item.categorie} :</p>
+                  <p>{item.total} CHF</p>
+                </div>
               );
             }
             return;
           })}
-          <div style={{ fontWeight: "bold" }}>total sorties : {totalExpense} CHF</div>
+          <div className="flex" style={{ fontWeight: "bold" }}>
+            <p className="w-96">total sorties :</p> <p>{totalExpense} CHF</p>
+          </div>
           <hr style={{ marginBottom: "30px", marginTop: "30px" }}></hr>
-          <div style={{ fontWeight: "bold" }}>Résultat : {(totalIncome - totalExpense).toFixed(2)} CHF</div>
+          <div className="flex" style={{ fontWeight: "bold" }}>
+            <p className="w-96">Résultat :</p> <p> {(totalIncome - totalExpense).toFixed(2)} CHF</p>
+          </div>
           <br />
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              handleExportXlsx();
-            }}
-          >
-            Exporter pour excel
-          </button>
+
           {!clicked && (
             <>
               <br />
@@ -260,8 +261,17 @@ function Home() {
           )}
           <br />
           {clicked && (
-            <GeneratePDF className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500" />
-          )}{" "}
+            <GeneratePDF className="cursor-pointer bg-blue-500 max-w-xs text-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500" />
+          )}
+          <div
+            className="cursor-pointer bg-blue-500 max-w-xs text-center hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
+            onClick={(e) => {
+              e.preventDefault();
+              handleExportXlsx();
+            }}
+          >
+            Exporter pour excel
+          </div>
         </div>
       </div>
     </React.Fragment>

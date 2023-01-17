@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+const { ipcRenderer } = require("electron");
 
 const ComptaContext = createContext();
 
@@ -19,13 +20,11 @@ export const StateContext = ({ children }) => {
     "Frais de transports",
     "Assurances",
   ]);
-  const [name, setName] = useState("");
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [infos, setInfos] = useState({});
+  const [infos, setInfos] = useState({ langue: "fr", style: "simple" });
+  const [saved, setSaved] = useState(true);
 
   useEffect(() => {
     if (transaction.length > 0) {
-      console.log(transaction);
       let totalIn = 0;
       let totalOut = 0;
       let incomeList = [];
@@ -51,7 +50,17 @@ export const StateContext = ({ children }) => {
       setTotalExpense(0);
     }
     setBalance(totalIncome - totalExpense);
+    setSaved(false);
   }, [transaction]);
+
+  useEffect(() => {
+    setSaved(false);
+    console.log(infos);
+  }, [infos]);
+
+  useEffect(() => {
+    ipcRenderer.send("save", saved); // send request
+  }, [saved]);
 
   // useEffect(() => {
   //   if (expense.length > 0) {
@@ -72,6 +81,8 @@ export const StateContext = ({ children }) => {
   return (
     <ComptaContext.Provider
       value={{
+        saved,
+        setSaved,
         infos,
         setInfos,
         expenseCategorie,
