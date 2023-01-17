@@ -185,6 +185,10 @@ function Home() {
     }
   }
 
+  useEffect(() => {
+    console.log(transaction);
+  });
+
   return (
     <React.Fragment>
       <Head>

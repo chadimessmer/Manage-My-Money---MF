@@ -130,17 +130,24 @@ function Home() {
 
     // heading entrées/sorties
 
-    let heading = [["Date", "Compte", "Libellé", "Montant CHF"]];
+    let heading = [["Date", "Compte", "Pièce", "Libellé", "Montant CHF"]];
 
     // Feuille des entrées
     let newIncome = [];
     for (const inc of income) {
-      delete inc.id;
-      newIncome.push(inc);
+      let incProv = {
+        date: inc.date,
+        categorie: inc.categorie,
+        piece: inc.piece,
+        desc: inc.desc,
+        prix: inc.prix,
+      };
+      newIncome.push(incProv);
     }
     let totalInc = {
       date: "",
       categorie: "",
+      piece: "",
       desc: "Total",
       prix: totalIncome,
     };
@@ -153,13 +160,21 @@ function Home() {
 
     let newExpense = [];
     for (const exp of expense) {
-      delete exp.id;
-      newExpense.push(exp);
+      let expProv = {
+        date: exp.date,
+        categorie: exp.categorie,
+        piece: exp.piece,
+        desc: exp.desc,
+        prix: exp.prix,
+      };
+      console.log(exp);
+      newExpense.push(expProv);
     }
 
     let totalExp = {
       date: "",
       categorie: "",
+      piece: "",
       desc: "Total",
       prix: totalExpense,
     };
