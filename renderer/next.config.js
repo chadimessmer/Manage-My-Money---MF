@@ -7,4 +7,8 @@ module.exports = {
     return config;
   },
   reactStrictMode: false,
+  i18n: {
+    locales: ["fr", "de"],
+    defaultLocale: "fr",
+  },
 };

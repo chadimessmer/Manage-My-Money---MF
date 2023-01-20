@@ -91,7 +91,7 @@ function Home() {
   const handleFormChange = (index, event) => {
     let data = [...transaction];
     let thisValue = event.target.value;
-    if (event.target.name === "prix") {
+    if (event.target.name === "prix" || "piece") {
       let number;
       if (thisValue != "") {
         number = parseFloat(thisValue);
@@ -106,6 +106,7 @@ function Home() {
     setClicked(false);
   };
   const sortBy = (cat) => {
+    console.log(cat);
     if (sortState) {
       setTransaction([...transaction].sort((a, b) => (a[cat] < b[cat] ? 1 : -1)));
       setSortState(false);
@@ -185,14 +186,10 @@ function Home() {
     }
   }
 
-  useEffect(() => {
-    console.log(transaction);
-  });
-
   return (
     <React.Fragment>
       <Head>
-        <title>Home - Pay less</title>
+        <title>Deduct All Taxes - MF</title>
       </Head>
       <div className="grid grid-col-1 text-2xl w-full ">
         <Nav />
@@ -270,7 +267,7 @@ function Home() {
                 className="mr-5 cursor-pointer bg-green-500 max-w-xs hover:bg-green-700 text-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
                 onClick={addMore}
               >
-                ajouter entrée
+                ajouter recette
               </div>
             )}
             {(displayTransaction == "all" || displayTransaction == "expense") && (
@@ -278,7 +275,7 @@ function Home() {
                 className="cursor-pointer bg-red-500 max-w-xs hover:bg-red-700 text-center text-white font-bold py-2 px-4 rounded focus:outline-none focus:border-gray-500"
                 onClick={addLess}
               >
-                ajouter sortie
+                ajouter charge
               </div>
             )}
           </div>

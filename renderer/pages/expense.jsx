@@ -55,7 +55,7 @@ function Home() {
   return (
     <React.Fragment>
       <Head>
-        <title>Home - Pay less</title>
+        <title>Deduct All Taxes - MF</title>
       </Head>
       <div className="grid grid-col-1 text-2xl w-full ">
         <Nav />

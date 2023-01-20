@@ -5,8 +5,12 @@ import { useStateContext } from "../lib/context";
 import { v4 as uuidv4 } from "uuid";
 import Nav from "../components/nav";
 import { TiDelete } from "react-icons/ti";
+import { useRouter } from "next/router";
 
 function Home() {
+  const { locale, locales } = useRouter();
+  console.log(locales);
+
   const incCatRef = useRef();
   const expCatRef = useRef();
 
@@ -63,7 +67,7 @@ function Home() {
   return (
     <React.Fragment>
       <Head>
-        <title>Home - Pay less</title>
+        <title>Deduct All Taxes - MF</title>
       </Head>
       <div className="grid grid-col-1 text-2xl w-full ">
         <Nav />
