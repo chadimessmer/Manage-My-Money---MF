@@ -37,7 +37,6 @@ function Home() {
 
   useEffect(() => {
     setIncomeDisplay([...transaction]);
-    console.log(incomeDisplay);
   }, [transaction]);
 
   useEffect(() => {
@@ -91,7 +90,9 @@ function Home() {
   const handleFormChange = (index, event) => {
     let data = [...transaction];
     let thisValue = event.target.value;
-    if (event.target.name === "prix" || "piece") {
+    console.log(event.target.name);
+    if (event.target.name == "prix" || event.target.name == "piece") {
+      console.log("yo");
       let number;
       if (thisValue != "") {
         number = parseFloat(thisValue);
